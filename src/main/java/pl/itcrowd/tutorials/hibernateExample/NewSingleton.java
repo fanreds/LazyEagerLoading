@@ -27,5 +27,40 @@ public class NewSingleton {
     @PostConstruct
     public void PostConcruct(){
 
+        final Leage leage = new Leage("Premiership");
+
+        final Team team1 = new Team("FC Liverpool");
+        final Team team2 = new Team("Arsenal");
+
+        final Player player1 = new Player("Gerrard");
+        final Player player2 = new Player("Arteta");
+        final Player player3 = new Player("Suerez");
+        final Player player4 = new Player("Podolski");
+
+        leage.getTeams().add(team1);
+        leage.getTeams().add(team2);
+
+        team1.getPlayers().add(player1);
+        team1.getPlayers().add(player3);
+        team2.getPlayers().add(player2);
+        team2.getPlayers().add(player4);
+
+
+        player1.setTeam(team1);
+        player2.setTeam(team2);
+        player3.setTeam(team1);
+        player4.setTeam(team2);
+
+        team1.setLeage(leage);
+        team2.setLeage(leage);
+
+        entityManager.persist(leage);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        final Leage el1 = entityManager.find(Leage.class,1L);
+        System.out.println(el1.getTeams().get(1).getPlayers().get(1));
+
     }
 }

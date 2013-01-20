@@ -2,6 +2,8 @@ package pl.itcrowd.tutorials.hibernateExample;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,4 +19,53 @@ public class Team implements Serializable {
     @SequenceGenerator(name = "TEAM_ID_SEQUENCE", sequenceName = "TEAM_ID_SEQUENCE", initialValue = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TEAM_ID_SEQUENCE")
     private Long id;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "LEAGE_ID")
+    private Leage leage;
+
+    @OneToMany(mappedBy = "team",cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private List<Player> players = new ArrayList<Player>();
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public Team() {
+    }
+
+    public Team(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Leage getLeage() {
+        return leage;
+    }
+
+    public void setLeage(Leage leage) {
+        this.leage = leage;
+    }
 }

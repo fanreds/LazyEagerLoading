@@ -23,12 +23,14 @@ public class Team implements Serializable {
     @Column(name = "NAME")
     private String name;
 
+    @OneToMany(mappedBy = "team",cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private List<Player> players = new ArrayList<Player>();
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "LEAGE_ID")
     private Leage leage;
 
-    @OneToMany(mappedBy = "team",cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private List<Player> players = new ArrayList<Player>();
+
 
     public List<Player> getPlayers() {
         return players;

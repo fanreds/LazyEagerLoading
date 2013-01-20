@@ -1,10 +1,14 @@
 package pl.itcrowd.tutorials.hibernateExample;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.TransactionSynchronizationRegistry;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,9 +21,16 @@ import javax.persistence.PersistenceContext;
 @Singleton
 public class NewSingleton {
 
+    private static final Logger LOGGER = Logger.getLogger(NewSingleton.class.getCanonicalName());
+
     @PersistenceContext
     EntityManager entityManager;
 
+    @Resource
+    private TransactionSynchronizationRegistry txReg;
+
+    @EJB
+    private TransactionTester transactionTester;
 
     public NewSingleton() {
     }
@@ -59,8 +70,11 @@ public class NewSingleton {
         entityManager.flush();
         entityManager.clear();
 
-        final Leage el1 = entityManager.find(Leage.class,1L);
-        System.out.println(el1.getTeams().get(1).getPlayers().get(1));
+        LOGGER.info("Transaction status: " + txReg.getTransactionStatus() + " key: " + txReg.getTransactionKey());
+
+        transactionTester.test();
+//        final Leage el1 = entityManager.find(Leage.class,1L);
+//        System.out.println(el1.getTeams().get(1).getPlayers().get(1));
 
     }
 }
